@@ -4,16 +4,18 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.perf.backend.dto.LoginRequest;
+import com.perf.backend.dto.LoginResponse;
 import com.perf.backend.dto.RegisterRequest;
 import com.perf.backend.dto.Result;
 import com.perf.backend.entity.User;
 import com.perf.backend.repository.UserRepository;
+import com.perf.backend.util.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,9 +27,29 @@ public class AuthController {
   @Autowired
   private PasswordEncoder passwordEncoder;
   
-  @GetMapping("/login")
-  public String login() {
-    return "login";
+  @Autowired
+  private JwtUtil jwtUtil;
+  
+  @PostMapping("/login")
+  public Result login(@RequestBody LoginRequest loginRequest) {
+    // 查找用户
+    User user = userRepository.findByUsername(loginRequest.getUsername());
+    if (user == null) {
+      return Result.fail(400, "用户名或密码错误");
+    }
+    
+    // 验证密码
+    if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+      return Result.fail(400, "用户名或密码错误");
+    }
+    
+    // 生成JWT token
+    String token = jwtUtil.generateToken(user.getUsername());
+    
+    // 创建登录响应
+    LoginResponse loginResponse = new LoginResponse(token, user.getUsername());
+    
+    return Result.success(loginResponse);
   }
   
   @PostMapping("/register")

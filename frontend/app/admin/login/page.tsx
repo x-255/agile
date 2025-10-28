@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button, Card, Input, Form, Typography, Space, App } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { App, Button, Card, Form, Input, Space, Typography } from 'antd'
+import { useCookiesNext } from 'cookies-next'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { loginApi } from '../../api/auth'
-import { useSetCookie } from 'cookies-next'
 
 const { Title, Text } = Typography
 
@@ -15,16 +15,29 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
-  const setCookie = useSetCookie()
+  const { getCookie, setCookie, deleteCookie } = useCookiesNext()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm<LoginFormData>()
   const { message } = App.useApp()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') || '/admin/dashboard'
+
+  useEffect(() => {
+    const loginHasExpired = getCookie('loginHasExpired')
+    if (loginHasExpired) {
+      deleteCookie('token')
+      deleteCookie('loginHasExpired')
+      message.error('登录过期，请重新登录')
+    }
+  }, [getCookie, setCookie, message, deleteCookie])
 
   const handleSubmit = async (values: LoginFormData) => {
     setLoading(true)
     try {
-      const { token, username } = await loginApi(values)
+      const {
+        data: { token, username },
+      } = await loginApi(values)
 
       if (token && username) {
         setCookie('token', token, {
@@ -38,7 +51,7 @@ export default function LoginPage() {
         })
 
         message.success('登录成功')
-        router.push('/admin/dashboard')
+        router.push(redirect)
       } else {
         message.error('登录失败，请检查账号密码')
       }

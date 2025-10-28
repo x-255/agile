@@ -1,3 +1,6 @@
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
 export type AnyObject = Record<string, unknown>
 
 export const isObject = (value: unknown): value is AnyObject => {
@@ -18,4 +21,14 @@ export const formatSearchParams = (params: Record<string, unknown>) => {
   })
   const result = searchParams.toString()
   return result ? `?${result}` : ''
+}
+
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
+
+export const throwJSONError = (err: unknown) => {
+  throw err instanceof Error
+    ? err
+    : isObject(err)
+      ? new Error(JSON.stringify(err))
+      : err
 }

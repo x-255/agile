@@ -2,10 +2,9 @@
 
 import { DownOutlined } from '@ant-design/icons'
 import { Dropdown, Layout, MenuProps, Space } from 'antd'
+import { useCookiesNext } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import AdminMenu from './admin-menu'
-import { useEffect, useState } from 'react'
-import { useDeleteCookie, useGetCookie } from 'cookies-next'
 
 const { Header, Sider, Content } = Layout
 
@@ -37,8 +36,8 @@ const contentStyle: React.CSSProperties = {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const getCookie = useGetCookie()
-  const deleteCookie = useDeleteCookie()
+  const { getCookie, deleteCookie } = useCookiesNext()
+
   const username = getCookie('username') || ''
 
   const items: MenuProps['items'] = [

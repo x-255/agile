@@ -16,6 +16,8 @@ import com.perf.backend.dto.Result;
 import com.perf.backend.entity.User;
 import com.perf.backend.repository.UserRepository;
 import com.perf.backend.util.JwtUtil;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/auth")
@@ -43,10 +45,10 @@ public class AuthController {
       return Result.fail(400, "用户名或密码错误");
     }
     
-    // 生成JWT token
-    String token = jwtUtil.generateToken(user.getUsername());
+    // 生成JWT token（使用用户ID提高安全性）
+    String token = jwtUtil.generateToken(user.getId());
     
-    // 创建登录响应
+    // 创建登录响应（仍然返回用户名用于前端显示）
     LoginResponse loginResponse = new LoginResponse(token, user.getUsername());
     
     return Result.success(loginResponse);
@@ -72,4 +74,15 @@ public class AuthController {
     
     return Result.success(null);
   }
+
+  @GetMapping("error")
+  public Result error() {
+    return Result.fail(401, "错误");
+  }
+
+  @GetMapping("test")
+  public Result test() {
+    return Result.success("test");
+  }
+
 }

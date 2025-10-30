@@ -75,13 +75,14 @@ public class AuthController {
     return Result.success(null);
   }
 
-  @GetMapping("error")
+  @PostMapping("error")
   public Result error() {
-    return Result.fail(401, "错误");
+    return Result.fail(401, "错误1111");
   }
 
   @GetMapping("test")
   public Result test() {
+    // return Result.fail(400, "错误1111");
     return Result.success("test");
   }
 

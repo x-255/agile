@@ -3,8 +3,9 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { App, Button, Card, Form, Input, Space, Typography } from 'antd'
 import { useCookiesNext } from 'cookies-next'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { use } from 'react'
+import useSWRMutation from 'swr/mutation'
 import { loginApi } from '../../api/auth'
 
 const { Title, Text } = Typography
@@ -14,41 +15,26 @@ interface LoginFormData {
   password: string
 }
 
-export default function LoginPage() {
-  const { getCookie, setCookie, deleteCookie } = useCookiesNext()
+interface LoginPageProps {
+  searchParams: Promise<{ redirect?: string }>
+}
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
+  const { setCookie } = useCookiesNext()
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
   const [form] = Form.useForm<LoginFormData>()
   const { message } = App.useApp()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/admin/dashboard'
-
-  useEffect(() => {
-    const loginHasExpired = getCookie('loginHasExpired')
-    if (loginHasExpired) {
-      deleteCookie('token')
-      deleteCookie('loginHasExpired')
-      message.error('登录过期，请重新登录')
-    }
-  }, [getCookie, setCookie, message, deleteCookie])
+  const { redirect = '/admin/dashboard' } = use(searchParams)
+  const { trigger, isMutating } = useSWRMutation('/auth/login', loginApi)
 
   const handleSubmit = async (values: LoginFormData) => {
-    setLoading(true)
     try {
-      const {
-        data: { token, username },
-      } = await loginApi(values)
+      const { token, username } = await trigger(values)
 
       if (token && username) {
-        setCookie('token', token, {
-          path: '/',
-          maxAge: 86300,
-        })
+        setCookie('token', token)
 
-        setCookie('username', username, {
-          path: '/',
-          maxAge: 86300,
-        })
+        setCookie('username', username)
 
         message.success('登录成功')
         router.push(redirect)
@@ -58,8 +44,6 @@ export default function LoginPage() {
     } catch (error) {
       console.error('登录失败:', error)
       message.error('登录失败，请稍后重试')
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -117,7 +101,7 @@ export default function LoginPage() {
                   type="primary"
                   htmlType="submit"
                   size="large"
-                  loading={loading}
+                  loading={isMutating}
                   className="h-12 w-full text-base"
                 >
                   登录

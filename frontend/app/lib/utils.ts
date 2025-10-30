@@ -1,13 +1,17 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-export type AnyObject = Record<string, unknown>
-
 export const isObject = (value: unknown): value is AnyObject => {
   return value !== null && typeof value === 'object'
 }
 
-export const formatSearchParams = (params: Record<string, unknown>) => {
+const hasOwnProperty = Object.prototype.hasOwnProperty
+export const hasOwn = (
+  val: AnyObject,
+  key: ObjectKeys
+): key is keyof typeof val => hasOwnProperty.call(val, key)
+
+export const formatSearchParams = (params: AnyObject) => {
   const searchParams = new URLSearchParams()
   Object.entries(params).forEach(([key, value]) => {
     if (value === undefined || value === null) return
@@ -24,11 +28,3 @@ export const formatSearchParams = (params: Record<string, unknown>) => {
 }
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
-
-export const throwJSONError = (err: unknown) => {
-  throw err instanceof Error
-    ? err
-    : isObject(err)
-      ? new Error(JSON.stringify(err))
-      : err
-}

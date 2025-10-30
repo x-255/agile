@@ -1,6 +1,6 @@
-import { AntdRegistry } from '@ant-design/nextjs-registry'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import AppProvider from './components/app-provider'
 import './globals.css'
 import Fix from './lib/fix'
 
@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Fix />
-        <AntdRegistry>{children}</AntdRegistry>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   )

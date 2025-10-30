@@ -1,21 +1,28 @@
 'use client'
 
-import { fetcher } from '@/app/api'
-import { throwJSONError } from '@/app/lib/utils'
+import { createMutationFetcher } from '@/app/api'
+import { testApi } from '@/app/api/auth'
 import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 
 export default function Page() {
-  const { data } = useSWR('/auth/test', fetcher)
-  console.log(`data====`, data)
+  const { data, error } = useSWR<string>(testApi)
+  const { trigger } = useSWRMutation(
+    '/auth/error',
+    createMutationFetcher({ method: 'POST' })
+  )
+
+  if (error) throw error
 
   return (
     <>
       <div
         onClick={async () => {
-          await fetcher('/auth/error').catch(throwJSONError)
+          trigger({ method: 'POST' })
         }}
       >
         仪表盘
+        <h1>{data}</h1>
       </div>
     </>
   )

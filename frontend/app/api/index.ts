@@ -1,28 +1,33 @@
-import { redirect } from 'next/navigation'
-import {
-  getCookieServer,
-  getCurrentPathname,
-  setCookieServer,
-} from '../lib/serverUtils'
-import { AnyObject, formatSearchParams, isObject } from '../lib/utils'
+import { getCookieServer } from '../lib/serverUtils'
+import { formatSearchParams, isObject } from '../lib/utils'
 
 export interface ApiResponse<T> {
   data: T
   message: string
 }
 
+export type URLType = string | URL | Request
+
+export type ApiBody = AnyObject | BodyInit
+
 export type ApiInit = Omit<RequestInit, 'body'> & {
-  body?: Record<string, unknown> | BodyInit
-  params?: Record<string, unknown>
+  body?: ApiBody
+  params?: AnyObject
 }
 
-export const fetcher = async <T>(
-  url: string | URL | Request,
-  apiInit: ApiInit = {}
-): Promise<{
+export interface MutationArg<T> {
+  arg: T
+}
+
+export interface ApiResponse<T = unknown> {
   data: T
   message: string
-}> => {
+}
+
+export const fetcher = async <R>(
+  url: URLType,
+  apiInit: ApiInit = {}
+): Promise<ApiResponse<R>> => {
   const { body, params, ...restInit } = apiInit
   const init: RequestInit = { ...restInit }
   if (typeof url === 'string' && !url.startsWith('http')) {
@@ -68,17 +73,13 @@ export const fetcher = async <T>(
     .then(async (res) => {
       const { code, data, message } = res
       if (code !== 200) {
-        if (code === 401) {
-          setCookieServer('loginHasExpired', 'true')
-          const pathname = await getCurrentPathname()
-          let redirectPath = '/admin/login'
-          if (pathname) {
-            redirectPath += `?redirect=${pathname}`
-          }
-          redirect(redirectPath)
-        }
         throw { code, message }
       }
       return { data, message, code: 200, error: '' }
     })
 }
+
+export const createMutationFetcher =
+  <T, R = ApiResponse>(init: ApiInit = {}) =>
+  (key: string, { arg }: MutationArg<T>) =>
+    fetcher<R>(key, { ...init, body: arg as ApiBody }).then((res) => res.data)

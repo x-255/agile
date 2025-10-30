@@ -1,8 +1,13 @@
-import { fetcher } from '.'
+import { createMutationFetcher } from '.'
 
-export const loginApi = (body: { username: string; password: string }) => {
-  return fetcher<{ token: string; username: string }>('/auth/login', {
-    method: 'POST',
-    body,
-  })
-}
+export const loginApi = createMutationFetcher<
+  {
+    username: string
+    password: string
+  },
+  { token: string; username: string }
+>({
+  method: 'POST',
+})
+
+export const testApi = '/auth/test'

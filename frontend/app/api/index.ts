@@ -1,4 +1,4 @@
-import { getCookieServer } from '../lib/serverUtils'
+import { getCookieServer } from '../lib/server-utils'
 import { formatSearchParams, isObject } from '../lib/utils'
 
 export interface ApiResponse<T> {

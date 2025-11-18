@@ -2,38 +2,32 @@ package com.perf.backend.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comment;
 
-@Entity
-@Table(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("user")
 public class User {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Comment("id")
+    @TableId(type = IdType.AUTO)
     private Integer id;
     
-    @Column(name = "username", nullable = false, length = 32)
+    @TableField("username")
     private String username;
     
-    @Column(nullable = false, length = 128)
+    @TableField("password")
     private String password;
     
-    @Column(nullable = false)
+    @TableField(value = "created_date", fill = FieldFill.INSERT)
     private LocalDateTime createdDate;
     
-    @Column(nullable = false)
+    @TableField(value = "update_date", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDate;
+    
+    @TableLogic
+    private Integer deleted;
 }

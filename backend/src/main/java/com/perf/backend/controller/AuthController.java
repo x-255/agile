@@ -14,7 +14,7 @@ import com.perf.backend.dto.LoginResponse;
 import com.perf.backend.dto.RegisterRequest;
 import com.perf.backend.dto.Result;
 import com.perf.backend.entity.User;
-import com.perf.backend.repository.UserRepository;
+import com.perf.backend.service.UserService;
 import com.perf.backend.util.JwtUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthController {
   
   @Autowired
-  private UserRepository userRepository;
+  private UserService userService;
   
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -35,7 +35,7 @@ public class AuthController {
   @PostMapping("/login")
   public Result login(@RequestBody LoginRequest loginRequest) {
     // 查找用户
-    User user = userRepository.findByUsername(loginRequest.getUsername());
+    User user = userService.findByUsername(loginRequest.getUsername());
     if (user == null) {
       return Result.fail(400, "用户名或密码错误");
     }
@@ -57,7 +57,7 @@ public class AuthController {
   @PostMapping("/register")
   public Result register(@RequestBody RegisterRequest registerRequest) {
     // 检查用户名是否已存在
-    if (userRepository.findByUsername(registerRequest.getUsername()) != null) {
+    if (userService.findByUsername(registerRequest.getUsername()) != null) {
       return Result.fail(400, "用户名已存在");
     }
     
@@ -66,11 +66,12 @@ public class AuthController {
     user.setUsername(registerRequest.getUsername());
     // 加密密码
     user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-    user.setCreatedDate(LocalDateTime.now());
-    user.setUpdateDate(LocalDateTime.now());
     
     // 保存用户
-    userRepository.save(user);
+    boolean success = userService.save(user);
+    if (!success) {
+      return Result.fail(500, "注册失败");
+    }
     
     return Result.success(null);
   }

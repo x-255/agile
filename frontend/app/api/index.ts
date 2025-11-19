@@ -75,7 +75,7 @@ export const fetcher = async <R>(
       if (code !== 200) {
         throw { code, message }
       }
-      return { data, message, code: 200, error: '' }
+      return { data, message, code: 200 }
     })
 }
 

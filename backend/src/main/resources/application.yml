@@ -8,6 +8,23 @@ spring:
     username: root
     password: 123123123
     driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # Spring AI配置 - 使用OpenAI兼容接口连接Open Router
+  ai:
+    openai:
+      api-key: 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
+      base-url: https://openrouter.ai
+      chat:
+        completions-path: /api/v1/chat/completions
+        options:
+          model: openai/gpt-oss-20b:free
+
+# 日志配置
+logging:
+  level:
+    '[org.springframework.web.client]': DEBUG
+    '[com.alibaba.cloud.ai.dashscope]': DEBUG
+    '[org.springframework.ai]': DEBUG
 
 # MyBatisPlus配置
 mybatis-plus:

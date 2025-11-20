@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.perf.backend.dto.QuestionnaireData;
 import com.perf.backend.dto.Result;
 import com.perf.backend.service.AiService;
 
@@ -17,10 +18,10 @@ public class AiController {
     this.aiService = aiService;
   }
 
-  @GetMapping("/chat")
-  public Result chat() {
+  @GetMapping("/getQuestions")
+  public Result getQuestions() {
     try {
-      String response = aiService.generateQuestions(6);
+      QuestionnaireData[] response = aiService.generateQuestions(15);
       return Result.success(response);
     } catch (Exception e) {
       return Result.fail(500, "AI服务异常: " + e.getMessage());

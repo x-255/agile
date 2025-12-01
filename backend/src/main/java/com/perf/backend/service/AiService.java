@@ -1,6 +1,6 @@
 package com.perf.backend.service;
 
-import com.perf.backend.dto.QuestionnaireData;
+import com.perf.backend.dto.QuestionnaireItem;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class AiService {
     this.chatClient = chatClientBuilder.build();
   }
 
-  public QuestionnaireData[] generateQuestions(int length) {
+  public QuestionnaireItem[] generateQuestions(int length) {
     String userProfile = "企业、金融、合规审计";
     return chatClient.prompt()
         .user(u -> u.text(
@@ -49,6 +49,6 @@ public class AiService {
             .param("profile", userProfile)
             .param("count", String.valueOf(length)))
         .call()
-        .entity(QuestionnaireData[].class);
+        .entity(QuestionnaireItem[].class);
   }
 }

@@ -8,15 +8,15 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionnaireData {
+public class QuestionnaireItem {
   private String dimension;
-  private List<QuestionData> questions;
+  private List<Question> questions;
 
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  public static class QuestionData {
+  public static class Question {
     private String content;
-    private List<String> answers;
+    private List<String> options;
   }
 }

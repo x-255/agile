@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.perf.backend.dto.QuestionnaireData;
+import com.perf.backend.dto.QuestionnaireItem;
 import com.perf.backend.dto.Result;
 import com.perf.backend.service.AiService;
 
@@ -21,7 +21,7 @@ public class AiController {
   @GetMapping("/getQuestions")
   public Result getQuestions() {
     try {
-      QuestionnaireData[] response = aiService.generateQuestions(15);
+      QuestionnaireItem[] response = aiService.generateQuestions(15);
       return Result.success(response);
     } catch (Exception e) {
       return Result.fail(500, "AI服务异常: " + e.getMessage());

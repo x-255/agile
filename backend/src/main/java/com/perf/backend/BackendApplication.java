@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BackendApplication {
 
 	public static void main(String[] args) {
+		System.out.println("OPENROUTER_API_KEY = " + System.getenv("OPENROUTER_API_KEY"));
 		SpringApplication.run(BackendApplication.class, args);
 	}
 

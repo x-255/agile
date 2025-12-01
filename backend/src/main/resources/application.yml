@@ -12,7 +12,7 @@ spring:
   # Spring AI配置 - 使用OpenAI兼容接口连接Open Router
   ai:
     openai:
-      api-key: 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
+      api-key: ${OPENROUTER_API_KEY}
       base-url: https://openrouter.ai
       chat:
         completions-path: /api/v1/chat/completions

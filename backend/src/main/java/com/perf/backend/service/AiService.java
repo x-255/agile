@@ -13,8 +13,7 @@ public class AiService {
     this.chatClient = chatClientBuilder.build();
   }
 
-  public QuestionnaireItem[] generateQuestions(int length) {
-    String userProfile = "企业、金融、合规审计";
+  public QuestionnaireItem[] generateQuestions(String userProfile, int length) {
     return chatClient.prompt()
         .user(u -> u.text(
             """
@@ -29,7 +28,7 @@ public class AiService {
                 **输入信息：**
                 用户画像数据在以下标签中提供：
                 <user_profile>
-                {profile}
+                {userProfile}
                 </user_profile>
 
                 **生成要求：**
@@ -45,8 +44,9 @@ public class AiService {
                     - 题目和选项需用中文书写
                     - 避免专业术语，确保大多数人能轻松理解
                     - 语言简洁，题目和选项不宜冗长
+                    - 维度名长度限制为2到4个汉字
                 """)
-            .param("profile", userProfile)
+            .param("userProfile", userProfile)
             .param("count", String.valueOf(length)))
         .call()
         .entity(QuestionnaireItem[].class);

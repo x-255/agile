@@ -9,6 +9,14 @@ spring:
     password: 123123123
     driver-class-name: com.mysql.cj.jdbc.Driver
   
+  # Redis配置
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+      password: ${REDIS_PASSWORD}
+      database: 0
+  
   # Spring AI配置 - 使用OpenAI兼容接口连接Open Router
   ai:
     openai:

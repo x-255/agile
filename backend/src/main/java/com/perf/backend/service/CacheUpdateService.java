@@ -3,87 +3,46 @@ package com.perf.backend.service;
 import com.perf.backend.dto.QuestionnaireItem;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AiService {
+public class CacheUpdateService {
 
   private final ChatClient chatClient;
   private final RedisTemplate<String, Object> redisTemplate;
-  private final CacheUpdateService cacheUpdateService;
 
-  public AiService(ChatClient.Builder chatClientBuilder, RedisTemplate<String, Object> redisTemplate,
-      CacheUpdateService cacheUpdateService) {
+  public CacheUpdateService(ChatClient.Builder chatClientBuilder, RedisTemplate<String, Object> redisTemplate) {
     this.chatClient = chatClientBuilder.build();
     this.redisTemplate = redisTemplate;
-    this.cacheUpdateService = cacheUpdateService;
   }
 
-  public QuestionnaireItem[] generateQuestions(String userProfile, int length) {
+  @Async
+  public void updateCacheAsync(String userProfile, int length, String cacheKey, String timestampKey,
+      String generatingKey, long currentTime) {
     if (userProfile == null) {
       userProfile = "";
     }
-
-    String baseKey = "ai:questions:" + userProfile + ":" + length;
-    String cacheKey = baseKey + ":data";
-    String timestampKey = baseKey + ":timestamp";
-    String generatingKey = baseKey + ":generating";
-
-    Long cachedTimestamp = null;
-    QuestionnaireItem[] cachedResult = null;
-
-    if (redisTemplate != null) {
-      Object timestampObj = redisTemplate.opsForValue().get(timestampKey);
-      cachedTimestamp = timestampObj instanceof Long ? (Long) timestampObj : null;
-
-      Object resultObj = redisTemplate.opsForValue().get(cacheKey);
-      cachedResult = resultObj instanceof QuestionnaireItem[] ? (QuestionnaireItem[]) resultObj : null;
+    if (cacheKey == null) {
+      cacheKey = "";
+    }
+    if (timestampKey == null) {
+      timestampKey = "";
+    }
+    if (generatingKey == null) {
+      generatingKey = "";
     }
 
-    long currentTime = System.currentTimeMillis();
-    long cacheDuration = (long) (2.5 * 60 * 60 * 1000);
-
-    if (cachedResult != null && cachedTimestamp != null) {
-      if (currentTime - cachedTimestamp < cacheDuration) {
-        return cachedResult;
-      } else {
-        // 缓存过期，检查是否正在生成
-        Boolean isGenerating = null;
-        if (redisTemplate != null) {
-          Object generatingObj = redisTemplate.opsForValue().get(generatingKey);
-          isGenerating = generatingObj instanceof Boolean ? (Boolean) generatingObj : null;
-        }
-        if (Boolean.FALSE.equals(isGenerating) || isGenerating == null) {
-          // 没有正在生成，异步更新
-          cacheUpdateService.updateCacheAsync(userProfile, length, cacheKey, timestampKey, generatingKey, currentTime);
-        }
-        return cachedResult;
-      }
-    }
-
-    // 没有缓存，检查是否正在生成
-    Boolean isGenerating = null;
-    if (redisTemplate != null) {
-      Object generatingObj = redisTemplate.opsForValue().get(generatingKey);
-      isGenerating = generatingObj instanceof Boolean ? (Boolean) generatingObj : null;
-    }
-    if (Boolean.TRUE.equals(isGenerating)) {
-      // 正在生成，返回空或旧缓存（如果有）
-      return cachedResult != null ? cachedResult : new QuestionnaireItem[0];
-    }
-
-    // 同步生成新缓存
-    QuestionnaireItem[] result = generateNewQuestions(userProfile, length);
     if (redisTemplate != null) {
       try {
         redisTemplate.opsForValue().set(generatingKey, Boolean.TRUE.booleanValue());
-        redisTemplate.opsForValue().set(cacheKey, java.util.Objects.requireNonNull(result));
+        QuestionnaireItem[] newResult = generateNewQuestions(userProfile, length);
+        redisTemplate.opsForValue().set(cacheKey, java.util.Objects.requireNonNull(newResult));
         redisTemplate.opsForValue().set(timestampKey, java.util.Objects.requireNonNull(Long.valueOf(currentTime)));
       } finally {
-        redisTemplate.opsForValue().set(generatingKey, Boolean.FALSE.booleanValue());
+        redisTemplate.opsForValue().set(generatingKey, java.util.Objects.requireNonNull(Boolean.FALSE));
       }
     }
-    return result;
   }
 
   private QuestionnaireItem[] generateNewQuestions(String userProfile, int length) {

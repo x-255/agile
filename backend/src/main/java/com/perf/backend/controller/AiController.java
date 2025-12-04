@@ -21,7 +21,7 @@ public class AiController {
   @GetMapping("/getQuestions")
   public Result getQuestions() {
     try {
-      String userProfile = "团队, 科技, 提升效率";
+      String userProfile = "团队,科技,提升效率";
       int length = 15;
       QuestionnaireItem[] response = aiService.generateQuestions(userProfile, length);
       return Result.success(response);

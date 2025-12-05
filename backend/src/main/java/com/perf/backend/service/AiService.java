@@ -68,20 +68,53 @@ public class AiService {
       isGenerating = generatingObj instanceof Boolean ? (Boolean) generatingObj : null;
     }
     if (Boolean.TRUE.equals(isGenerating)) {
-      // 正在生成，返回空或旧缓存（如果有）
-      return cachedResult != null ? cachedResult : new QuestionnaireItem[0];
+      // 正在生成，等待生成完成
+      long waitStartTime = System.currentTimeMillis();
+      long maxWaitTime = 5 * 60 * 1000;
+      long checkInterval = 500;
+
+      while (System.currentTimeMillis() - waitStartTime < maxWaitTime) {
+        try {
+          Thread.sleep(checkInterval);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          break;
+        }
+
+        // 再次检查缓存
+        Object resultObj = redisTemplate.opsForValue().get(cacheKey);
+        QuestionnaireItem[] result = resultObj instanceof QuestionnaireItem[] ? (QuestionnaireItem[]) resultObj : null;
+
+        // 检查是否还在生成
+        Object generatingObj = redisTemplate.opsForValue().get(generatingKey);
+        Boolean stillGenerating = generatingObj instanceof Boolean ? (Boolean) generatingObj : null;
+
+        if (result != null) {
+          return result;
+        }
+
+        if (Boolean.FALSE.equals(stillGenerating)) {
+          break;
+        }
+      }
+
+      // 等待超时或生成完成但没有结果，返回空数组
+      return new QuestionnaireItem[0];
     }
 
     // 同步生成新缓存
-    QuestionnaireItem[] result = generateNewQuestions(userProfile, length);
+    QuestionnaireItem[] result = null;
     if (redisTemplate != null) {
       try {
         redisTemplate.opsForValue().set(generatingKey, Boolean.TRUE.booleanValue());
+        result = generateNewQuestions(userProfile, length);
         redisTemplate.opsForValue().set(cacheKey, java.util.Objects.requireNonNull(result));
         redisTemplate.opsForValue().set(timestampKey, java.util.Objects.requireNonNull(Long.valueOf(currentTime)));
       } finally {
         redisTemplate.opsForValue().set(generatingKey, Boolean.FALSE.booleanValue());
       }
+    } else {
+      result = generateNewQuestions(userProfile, length);
     }
     return result;
   }

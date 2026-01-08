@@ -12,8 +12,8 @@ import com.perf.backend.dto.LoginRequest;
 import com.perf.backend.dto.LoginResponse;
 import com.perf.backend.dto.RegisterRequest;
 import com.perf.backend.dto.Result;
-import com.perf.backend.entity.User;
-import com.perf.backend.service.UserService;
+import com.perf.backend.entity.Administrator;
+import com.perf.backend.service.AdministratorService;
 import com.perf.backend.util.JwtUtil;
 
 @RestController
@@ -21,7 +21,7 @@ import com.perf.backend.util.JwtUtil;
 public class AuthController {
   
   @Autowired
-  private UserService userService;
+  private AdministratorService administratorService;
   
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -31,22 +31,22 @@ public class AuthController {
   
   @PostMapping("/login")
   public Result login(@RequestBody LoginRequest loginRequest) {
-    // 查找用户
-    User user = userService.findByUsername(loginRequest.getUsername());
-    if (user == null) {
+    // 查找管理员
+    Administrator administrator = administratorService.findByUsername(loginRequest.getUsername());
+    if (administrator == null) {
       return Result.fail(400, "用户名或密码错误");
     }
     
     // 验证密码
-    if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+    if (!passwordEncoder.matches(loginRequest.getPassword(), administrator.getPassword())) {
       return Result.fail(400, "用户名或密码错误");
     }
     
-    // 生成JWT token（使用用户ID提高安全性）
-    String token = jwtUtil.generateToken(user.getId());
+    // 生成JWT token（使用管理员ID提高安全性）
+    String token = jwtUtil.generateToken(administrator.getId());
     
     // 创建登录响应（仍然返回用户名用于前端显示）
-    LoginResponse loginResponse = new LoginResponse(token, user.getUsername());
+    LoginResponse loginResponse = new LoginResponse(token, administrator.getUsername());
     
     return Result.success(loginResponse);
   }
@@ -54,18 +54,18 @@ public class AuthController {
   @PostMapping("/register")
   public Result register(@RequestBody RegisterRequest registerRequest) {
     // 检查用户名是否已存在
-    if (userService.findByUsername(registerRequest.getUsername()) != null) {
+    if (administratorService.findByUsername(registerRequest.getUsername()) != null) {
       return Result.fail(400, "用户名已存在");
     }
     
-    // 创建新用户
-    User user = new User();
-    user.setUsername(registerRequest.getUsername());
+    // 创建新管理员
+    Administrator administrator = new Administrator();
+    administrator.setUsername(registerRequest.getUsername());
     // 加密密码
-    user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+    administrator.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
     
-    // 保存用户
-    boolean success = userService.save(user);
+    // 保存管理员
+    boolean success = administratorService.save(administrator);
     if (!success) {
       return Result.fail(500, "注册失败");
     }

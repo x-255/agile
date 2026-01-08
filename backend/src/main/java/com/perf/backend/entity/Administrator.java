@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("user")
-public class User {
+@TableName("administrator")
+public class Administrator {
     
     @TableId(type = IdType.AUTO)
     private Integer id;

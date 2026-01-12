@@ -1,6 +1,6 @@
 -- 插入身份类型数据
 INSERT INTO dictionary (id, category, code, name, description, `order`, created_date, update_date) VALUES
-(1, 'identity_type', '1', '(我主要想评估自身的技能与实践)', NULL, 0, NOW(), NOW()),
+(1, 'identity_type', '1', '个人(我主要想评估自身的技能与实践)', NULL, 0, NOW(), NOW()),
 (2, 'identity_type', '2', '单个团队 (我评估我所在或我辅导的一个团队，通常5-9人)', NULL, 0, NOW(), NOW()),
 (3, 'identity_type', '3', '整个业务单元或公司 (我评估涉及多个部门、几十至上百人的大型组织)', NULL, 0, NOW(), NOW());
 

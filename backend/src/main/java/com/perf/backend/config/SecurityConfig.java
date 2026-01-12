@@ -20,6 +20,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/ai/**").permitAll()
+            .requestMatchers("/dictionary/**").permitAll()
             .anyRequest().authenticated());
 
     return http.build();

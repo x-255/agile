@@ -28,7 +28,7 @@ public class Dictionary {
     @TableField("description")
     private String description;
     
-    @TableField("order")
+    @TableField("`order`")
     private Integer order;
     
     @TableField(value = "created_date", fill = FieldFill.INSERT)

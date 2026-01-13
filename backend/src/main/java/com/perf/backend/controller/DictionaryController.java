@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.perf.backend.dto.FrontDictionaryVO;
 import com.perf.backend.dto.Result;
 import com.perf.backend.service.DictionaryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/dictionary")
@@ -22,10 +25,10 @@ public class DictionaryController {
     public Result getDictionaryList(@RequestParam(required = false) String category) {
         try {
             if (category != null && !category.isEmpty()) {
-                var result = dictionaryService.getByCategory(category);
+                List<FrontDictionaryVO> result = dictionaryService.getFrontByCategory(category);
                 return Result.success(result);
             } else {
-                var result = dictionaryService.getAll();
+                List<FrontDictionaryVO> result = dictionaryService.getAllFront();
                 return Result.success(result);
             }
         } catch (Exception e) {

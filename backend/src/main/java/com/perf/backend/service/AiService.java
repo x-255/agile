@@ -19,12 +19,12 @@ public class AiService {
     this.cacheUpdateService = cacheUpdateService;
   }
 
-  public QuestionnaireItem[] generateQuestions(String userProfile, int length) {
+  public QuestionnaireItem[] generateQuestions(String userProfile, int length, String cacheKeyPrefix) {
     if (userProfile == null) {
       userProfile = "";
     }
 
-    String baseKey = "ai:questions:" + userProfile + ":" + length;
+    String baseKey = "ai:questions:" + cacheKeyPrefix + ":" + length;
     String cacheKey = baseKey + ":data";
     String timestampKey = baseKey + ":timestamp";
     String generatingKey = baseKey + ":generating";
@@ -127,11 +127,6 @@ public class AiService {
                   **任务：**
                   根据用户画像生成一份通俗易懂的评估题目。
 
-                  **用户画像结构：**
-                  - 视角：个人、团队、企业
-                  - 行业：互联网/科技、金融/保险、医疗/制药等
-                  - 痛点：提升效率、优化协作、提高质量等
-
                   **输入信息：**
                   用户画像数据在以下标签中提供：
                   <user_profile>
@@ -152,6 +147,7 @@ public class AiService {
                       - 避免专业术语，确保大多数人能轻松理解
                       - 语言简洁，题目和选项不宜冗长
                       - 维度名长度限制为2到4个汉字
+                  6. **初始答案**： 默认都统一为-1
                   """)
               .param("userProfile", userProfile)
               .param("count", String.valueOf(length)))

@@ -17,6 +17,8 @@ CREATE TABLE user (
     identity_type INT COMMENT '身份类型（外键，关联dictionary表）',
     team_size INT COMMENT '团队规模（外键，关联dictionary表）',
     company_size INT COMMENT '企业规模（外键，关联dictionary表）',
+    industry VARCHAR(20) COMMENT '所在行业',
+    improvement_goal VARCHAR(20) COMMENT '最希望解决或改进的问题',
     created_date DATETIME NOT NULL COMMENT '创建时间',
     update_date DATETIME NOT NULL COMMENT '更新时间',
     deleted INT DEFAULT 0 COMMENT '逻辑删除标记（0：未删除，1：已删除）'

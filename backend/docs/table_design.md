@@ -27,6 +27,8 @@
 | identity_type | INT          | NOT NULL                    | 身份类型（外键，关联dictionary表） |
 | team_size     | INT          |                             | 团队规模（外键，关联dictionary表） |
 | company_size  | INT          |                             | 企业规模（外键，关联dictionary表） |
+| industry      | VARCHAR(20)  |                             | 所在行业                   |
+| improvement_goal | VARCHAR(20) |                             | 最希望解决或改进的问题         |
 | created_date  | DATETIME     | NOT NULL                    | 创建时间                   |
 | update_date   | DATETIME     | NOT NULL                    | 更新时间                   |
 | deleted       | INT          | DEFAULT 0                   | 逻辑删除标记（0：未删除，1：已删除）    |

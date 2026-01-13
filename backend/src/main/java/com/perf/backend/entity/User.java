@@ -34,6 +34,12 @@ public class User {
     @TableField("company_size")
     private Integer companySize;
     
+    @TableField("industry")
+    private String industry;
+
+    @TableField("improvement_goal")
+    private String improvementGoal;
+
     @TableField(value = "created_date", fill = FieldFill.INSERT)
     private LocalDateTime createdDate;
     

@@ -36,7 +36,11 @@ export default function Page() {
   useEffect(() => {
     if (userInfo) {
       // 存储用户信息到缓存
-      setUserInfo(userInfo)
+      setUserInfo({
+        name: userInfo.name,
+        email: userInfo.email || '',
+        mobile: userInfo.mobile || '',
+      })
       // 跳转到用户信息展示页面
       router.replace(`/we/user`)
     }

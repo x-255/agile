@@ -48,11 +48,6 @@ export default function UserPage() {
           </div>
 
           <div className="flex items-center justify-between rounded-md bg-gray-50 p-3">
-            <span className="font-medium text-gray-700">用户ID：</span>
-            <span className="text-gray-900">{userInfo.userid}</span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-md bg-gray-50 p-3">
             <span className="font-medium text-gray-700">邮箱：</span>
             <span className="text-gray-900">{userInfo.email || '未设置'}</span>
           </div>
@@ -60,18 +55,6 @@ export default function UserPage() {
           <div className="flex items-center justify-between rounded-md bg-gray-50 p-3">
             <span className="font-medium text-gray-700">手机号：</span>
             <span className="text-gray-900">{userInfo.mobile || '未设置'}</span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-md bg-gray-50 p-3">
-            <span className="font-medium text-gray-700">部门：</span>
-            <span className="text-gray-900">
-              {userInfo.department?.join(', ') || '无'}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-md bg-gray-50 p-3">
-            <span className="font-medium text-gray-700">职位：</span>
-            <span className="text-gray-900">{userInfo.position || '无'}</span>
           </div>
 
           <div className="mt-6 space-y-3">

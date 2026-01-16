@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WeChatWorkConfig {
 
-    @Value("${CORP_ID:wwbe02f7abf8bd67b8}")
+    @Value("${CORP_ID}")
     private String corpId;
 
-    @Value("${AGENT_ID:1000009}")
+    @Value("${AGENT_ID}")
     private Integer agentId;
 
     @Value("${APP_SECRET}")

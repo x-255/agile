@@ -1,12 +1,9 @@
 import { immer } from 'zustand/middleware/immer'
 
-interface UserInfo {
+export interface UserInfo {
   name: string
-  userid: string
-  email?: string
-  mobile?: string
-  department?: number[]
-  position?: string
+  email: string
+  mobile: string
 }
 
 export interface UserSlice {

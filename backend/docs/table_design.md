@@ -24,17 +24,12 @@
 | name          | VARCHAR(100) | NOT NULL                    | 姓名                     |
 | phone         | VARCHAR(20)  | NOT NULL, UNIQUE            | 手机号                    |
 | email         | VARCHAR(100) | NOT NULL, UNIQUE            | 邮箱                     |
-| identity_type | INT          | NOT NULL                    | 身份类型（外键，关联dictionary表） |
-| team_size     | INT          |                             | 团队规模（外键，关联dictionary表） |
-| company_size  | INT          |                             | 企业规模（外键，关联dictionary表） |
-| industry      | VARCHAR(20)  |                             | 所在行业                   |
-| improvement_goal | VARCHAR(20) |                             | 最希望解决或改进的问题         |
 | created_date  | DATETIME     | NOT NULL                    | 创建时间                   |
 | update_date   | DATETIME     | NOT NULL                    | 更新时间                   |
 | deleted       | INT          | DEFAULT 0                   | 逻辑删除标记（0：未删除，1：已删除）    |
 
 ### 2.2 表描述
-用于存储系统用户信息，包括姓名、手机号、邮箱、身份类型以及可选的团队规模和企业规模信息。
+用于存储系统用户信息，包括姓名、手机号、邮箱等基本信息。
 
 ## 3. 数据字典表 (dictionary)
 
@@ -61,6 +56,11 @@
 | id                 | INT         | PRIMARY KEY, AUTO_INCREMENT | 内部ID                                           |
 | record_no          | VARCHAR(32) | NOT NULL, UNIQUE            | 业务记录编号（格式：RPT+时间戳+随机数）          |
 | user_id            | INT         | NOT NULL                    | 用户ID（外键，关联user表）                       |
+| identity_type      | INT         | NOT NULL                    | 身份类型（外键，关联dictionary表）               |
+| team_size          | INT         |                             | 团队规模（外键，关联dictionary表）               |
+| company_size       | INT         |                             | 企业规模（外键，关联dictionary表）               |
+| industry           | VARCHAR(20) |                             | 所在行业                                         |
+| improvement_goal   | VARCHAR(50) |                             | 最希望解决或改进的问题                             |
 | questionnaire_json | JSON        | NOT NULL                    | 问卷JSON数据（AI生成，包含问题、选项和用户答案） |
 | start_time         | DATETIME    | NOT NULL                    | 开始答题时间                                     |
 | end_time           | DATETIME    |                             | 结束答题时间                                     |
@@ -68,7 +68,7 @@
 | deleted            | INT         | DEFAULT 0                   | 逻辑删除标记（0：未删除，1：已删除）             |
 
 ### 4.2 表描述
-用于存储用户答题记录，包括AI生成的问卷JSON数据、用户答案JSON数据、答题时间、状态等信息。
+用于存储用户答题记录，包括答题时的身份信息快照、行业信息、改进目标、AI生成的问卷JSON数据、用户答案JSON数据、答题时间、状态等信息。
 
 ## 5. 报告表 (report)
 

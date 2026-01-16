@@ -1,11 +1,6 @@
 import { getCookieServer } from '../lib/server-utils'
 import { formatSearchParams, isObject } from '../lib/utils'
 
-export interface ApiResponse<T> {
-  data: T
-  message: string
-}
-
 export type URLType = string | URL | Request
 
 export type ApiBody = AnyObject | BodyInit
@@ -22,6 +17,7 @@ export interface MutationArg<T> {
 export interface ApiResponse<T = unknown> {
   data: T
   message: string
+  code: number
 }
 
 export const fetcher = async <R>(

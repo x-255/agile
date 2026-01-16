@@ -8,15 +8,6 @@ export default function Page() {
   const [isSdkReady, setIsSdkReady] = useState(false)
 
   useEffect(() => {
-    // 仅在客户端环境下初始化VConsole
-    let vconsole: unknown = null
-    if (typeof window !== 'undefined') {
-      // 动态导入VConsole，避免服务器端渲染错误
-      import('vconsole').then((VConsoleModule) => {
-        vconsole = new VConsoleModule.default()
-        console.log('VConsole初始化成功')
-      })
-    }
     const currentLoginPanel = loginPanelRef.current
 
     // 初始化企业微信SDK
@@ -68,9 +59,6 @@ export default function Page() {
     }
 
     return () => {
-      if (vconsole && typeof vconsole === 'object' && 'destroy' in vconsole) {
-        ;(vconsole as { destroy: () => void }).destroy()
-      }
       if (
         currentLoginPanel &&
         typeof currentLoginPanel === 'object' &&
@@ -87,13 +75,14 @@ export default function Page() {
 
     // 内部浏览器登录 - 构造企业微信OAuth授权URL
     const corpId = 'wwbe02f7abf8bd67b8'
+    const agentId = '1000009' // 企业微信应用的AgentID，必填参数
     const redirectUri = encodeURIComponent(
       'http://wecom.perficientus.com.cn/we/callback'
     )
     const state = 'loginState' // 示例state，实际可用于防止CSRF攻击
 
-    // 构造授权URL - 内部浏览器使用snsapi_base静默授权
-    const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base&state=${state}#wechat_redirect`
+    // 构造授权URL - 内部浏览器使用snsapi_privateinfo获取详细信息
+    const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_privateinfo&state=${state}#wechat_redirect`
 
     console.log('内部浏览器登录，跳转到授权页面:', authUrl)
     // 跳转到企业微信授权页面
@@ -106,14 +95,14 @@ export default function Page() {
 
     // 外部浏览器登录 - 构造企业微信扫码登录URL
     const corpId = 'wwbe02f7abf8bd67b8'
-    const agentId = '1000002' // 企业微信应用的AgentID，必填参数
+    const agentId = '1000009' // 企业微信应用的AgentID，必填参数
     const redirectUri = encodeURIComponent(
       'http://wecom.perficientus.com.cn/we/callback'
     )
     const state = 'loginState' // 示例state，实际可用于防止CSRF攻击
 
     // 构造扫码登录URL - 外部浏览器使用企业微信扫码登录，包含必填的agentid参数
-    const authUrl = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`
+    const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&scope=snsapi_privateinfo&state=${state}#wechat_redirect`
 
     console.log('外部浏览器登录，跳转到扫码页面:', authUrl)
     // 跳转到企业微信扫码登录页面

@@ -24,12 +24,13 @@
 | name          | VARCHAR(100) | NOT NULL                    | 姓名                     |
 | phone         | VARCHAR(20)  | NOT NULL, UNIQUE            | 手机号                    |
 | email         | VARCHAR(100) | NOT NULL, UNIQUE            | 邮箱                     |
+| wwUserid      | VARCHAR(64)  |                             | 企业微信用户ID               |
 | created_date  | DATETIME     | NOT NULL                    | 创建时间                   |
 | update_date   | DATETIME     | NOT NULL                    | 更新时间                   |
 | deleted       | INT          | DEFAULT 0                   | 逻辑删除标记（0：未删除，1：已删除）    |
 
 ### 2.2 表描述
-用于存储系统用户信息，包括姓名、手机号、邮箱等基本信息。
+用于存储系统用户信息，包括姓名、手机号、邮箱、企业微信用户ID等基本信息。
 
 ## 3. 数据字典表 (dictionary)
 

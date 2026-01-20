@@ -14,6 +14,7 @@ CREATE TABLE user (
     name VARCHAR(100) NOT NULL COMMENT '姓名',
     phone VARCHAR(20) NOT NULL UNIQUE COMMENT '手机号',
     email VARCHAR(100) NOT NULL UNIQUE COMMENT '邮箱',
+    wwUserid VARCHAR(64) COMMENT '企业微信用户ID',
     created_date DATETIME NOT NULL COMMENT '创建时间',
     update_date DATETIME NOT NULL COMMENT '更新时间',
     deleted INT DEFAULT 0 COMMENT '逻辑删除标记（0：未删除，1：已删除）'

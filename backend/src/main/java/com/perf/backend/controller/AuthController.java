@@ -138,4 +138,15 @@ public class AuthController {
     }
   }
 
+  @GetMapping("wecom-signature")
+  public Result getWecomSignature(@RequestParam String url) {
+    try {
+      java.util.Map<String, String> signature = weChatWorkUtil.getJsApiSignature(url);
+      return Result.success(signature);
+    } catch (Exception e) {
+      logger.error("获取企业微信签名失败", e);
+      return Result.fail(500, "获取企业微信签名失败：" + e.getMessage());
+    }
+  }
+
 }

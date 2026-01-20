@@ -11,3 +11,6 @@ export const loginApi = createMutationFetcher<
 })
 
 export const testApi = '/auth/test'
+
+export const wecomSignatureApi = (url: string) =>
+  `/auth/wecom-signature?url=${encodeURIComponent(url)}`

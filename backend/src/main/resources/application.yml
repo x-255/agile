@@ -20,12 +20,12 @@ spring:
   # Spring AI配置 - 使用OpenAI兼容接口连接Open Router
   ai:
     openai:
-      api-key: ${OPENROUTER_API_KEY}
-      base-url: https://openrouter.ai
+      api-key: ${LLM_API_KEY}
+      base-url: https://open.bigmodel.cn
       chat:
-        completions-path: /api/v1/chat/completions
+        completions-path: /api/paas/v4/chat/completions
         options:
-          model: openai/gpt-oss-20b:free
+          model: glm-4.5-flash
 
 # 日志配置
 logging:

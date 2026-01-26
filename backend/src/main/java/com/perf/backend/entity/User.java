@@ -25,21 +25,9 @@ public class User {
     @TableField("email")
     private String email;
     
-    @TableField("identity_type")
-    private Integer identityType;
+    @TableField("wwUserid")
+    private String wwUserid;
     
-    @TableField("team_size")
-    private Integer teamSize;
-    
-    @TableField("company_size")
-    private Integer companySize;
-    
-    @TableField("industry")
-    private String industry;
-
-    @TableField("improvement_goal")
-    private String improvementGoal;
-
     @TableField(value = "created_date", fill = FieldFill.INSERT)
     private LocalDateTime createdDate;
     

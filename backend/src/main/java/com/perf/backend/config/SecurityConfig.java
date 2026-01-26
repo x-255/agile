@@ -21,6 +21,7 @@ public class SecurityConfig {
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/ai/**").permitAll()
             .requestMatchers("/dictionary/**").permitAll()
+            .requestMatchers("/questionnaire/**").permitAll()
             .anyRequest().authenticated());
 
     return http.build();

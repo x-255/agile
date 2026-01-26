@@ -53,4 +53,25 @@ public class DictionaryService {
         vo.setName(dictionary.getName());
         return vo;
     }
+
+    public Integer getDictionaryIdByCode(String category, String code) {
+        LambdaQueryWrapper<Dictionary> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Dictionary::getCategory, category);
+        wrapper.eq(Dictionary::getCode, code);
+        Dictionary dictionary = dictionaryMapper.selectOne(wrapper);
+        return dictionary != null ? dictionary.getId() : null;
+    }
+
+    public String getDictionaryNameById(Integer id) {
+        Dictionary dictionary = dictionaryMapper.selectById(id);
+        return dictionary != null ? dictionary.getName() : null;
+    }
+
+    public String getDictionaryNameByCode(String category, String code) {
+        LambdaQueryWrapper<Dictionary> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Dictionary::getCategory, category);
+        wrapper.eq(Dictionary::getCode, code);
+        Dictionary dictionary = dictionaryMapper.selectOne(wrapper);
+        return dictionary != null ? dictionary.getName() : null;
+    }
 }

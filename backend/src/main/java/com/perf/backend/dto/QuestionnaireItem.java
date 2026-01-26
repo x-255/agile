@@ -21,6 +21,6 @@ public class QuestionnaireItem implements Serializable {
     private static final long serialVersionUID = 1L;
     private String content;
     private List<String> options;
-    private Integer answer = -1;
+    private Integer answerIndex = -1;
   }
 }

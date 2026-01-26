@@ -22,6 +22,21 @@ public class QuestionnaireAnswerRecord {
     @TableField("user_id")
     private Integer userId;
     
+    @TableField("identity_type")
+    private Integer identityType;
+    
+    @TableField("team_size")
+    private Integer teamSize;
+    
+    @TableField("company_size")
+    private Integer companySize;
+    
+    @TableField("industry")
+    private Integer industry;
+    
+    @TableField("improvement_goal")
+    private String improvementGoal;
+    
     @TableField("questionnaire_json")
     private String questionnaireJson;
     

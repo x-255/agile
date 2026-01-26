@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.perf.backend.dto.ComprehensiveAnalysisData;
+import com.perf.backend.dto.DimensionAnalysisData;
+import com.perf.backend.dto.GenerateAiDataRequest;
+import com.perf.backend.dto.ImplementationAnalysisData;
 import com.perf.backend.dto.QuestionnaireItem;
 import com.perf.backend.dto.Result;
 import com.perf.backend.dto.UserProfileRequest;
@@ -110,5 +114,44 @@ public class AiController {
         .map(Dictionary::getName)
         .findFirst()
         .orElse(null);
+  }
+
+  @PostMapping("/generateComprehensiveData")
+  public Result generateComprehensiveData(@RequestBody GenerateAiDataRequest request) {
+    try {
+      logger.info("Generating comprehensive data for reportId: {}", request.getReportId());
+      ComprehensiveAnalysisData comprehensiveData = aiService.generateComprehensiveData(request.getReportId());
+      logger.info("Successfully generated comprehensive data for reportId: {}", request.getReportId());
+      return Result.success(comprehensiveData);
+    } catch (Exception e) {
+      logger.error("Failed to generate comprehensive data: {}", e.getMessage(), e);
+      return Result.fail(500, "生成综合分析数据失败: " + e.getMessage());
+    }
+  }
+
+  @PostMapping("/generateDimensionData")
+  public Result generateDimensionData(@RequestBody GenerateAiDataRequest request) {
+    try {
+      logger.info("Generating dimension data for reportId: {}", request.getReportId());
+      DimensionAnalysisData[] dimensionData = aiService.generateDimensionData(request.getReportId());
+      logger.info("Successfully generated dimension data for reportId: {}", request.getReportId());
+      return Result.success(dimensionData);
+    } catch (Exception e) {
+      logger.error("Failed to generate dimension data: {}", e.getMessage(), e);
+      return Result.fail(500, "生成维度详细分析数据失败: " + e.getMessage());
+    }
+  }
+
+  @PostMapping("/generateImplementationData")
+  public Result generateImplementationData(@RequestBody GenerateAiDataRequest request) {
+    try {
+      logger.info("Generating implementation data for reportId: {}", request.getReportId());
+      ImplementationAnalysisData implementationData = aiService.generateImplementationData(request.getReportId());
+      logger.info("Successfully generated implementation data for reportId: {}", request.getReportId());
+      return Result.success(implementationData);
+    } catch (Exception e) {
+      logger.error("Failed to generate implementation data: {}", e.getMessage(), e);
+      return Result.fail(500, "生成落地实施分析数据失败: " + e.getMessage());
+    }
   }
 }

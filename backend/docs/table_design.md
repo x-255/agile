@@ -101,9 +101,15 @@ comprehensive_data 结构 - 综合分析 + 行业对标分析
   "overallAssessment": "综合能力的描述，3句话，每句话不超过100字符",
   "keyStrengths": "综合能力的核心优势，一句话，不超过60字符",
   "keyWeaknesses": "综合能力的关键短板，一句话，不超过60字符",
+  "industrialPosition": "综合能力的行业定位，一句话，不超过60字符",
   "benchmarkComprehensivePositioning": "行业对标的定位，一句话，不超过70字符",
   "benchmarkCompetitiveAdvantages": "行业对标的优势分析，一句话，不超过70字符",
-  "benchmarkGrowthPotential": "行业对标的成长空间，一句话，不超过70字符"
+  "benchmarkGrowthPotential": "行业对标的成长空间，一句话，不超过70字符",
+  "comprehensiveScoreInfo": {
+    "score": "上文中给出的综合能力分数",
+    "industryAverage": "你根据自己的行业经验，给出的行业平均综合能力分数",
+    "industryBenchmark": "你根据行业标准，给出的行业综合能力标杆分数"
+  }
 }
 ```
 
@@ -113,8 +119,10 @@ dimension_data 结构 - 维度详细分析
   {
     "dimension": "维度名称",
     "detailedAnalysis": "维度分析，不超过80字符",
+    "industryAverage": "你根据自己的行业经验，给出的行业平均综合能力分数",
+    "industryBenchmark": "你根据行业标准，给出的行业综合能力标杆分数",
     "strengths": "核心优势，字符串数组，2-3项，每项不超过8个字符",
-    "weaknesses": "待改进项，字符串数组，2-3项，每项不超过8个字符"
+    "weaknesses": "待改进项，字符串数组，2-3项，每项不超过8个字符",
   }
 ]
 ```

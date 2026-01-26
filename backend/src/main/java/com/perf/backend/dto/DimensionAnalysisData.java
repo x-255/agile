@@ -16,4 +16,6 @@ public class DimensionAnalysisData implements Serializable {
   private String detailedAnalysis;
   private List<String> strengths;
   private List<String> weaknesses;
+  private Integer industryAverage;
+  private Integer industryBenchmark;
 }

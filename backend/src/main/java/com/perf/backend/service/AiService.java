@@ -232,6 +232,7 @@ public class AiService {
       prompt.append("   - overallAssessment：综合能力的描述，3句话，每句话不超过100字符\n");
       prompt.append("   - keyStrengths：综合能力的核心优势，一句话，不超过60字符\n");
       prompt.append("   - keyWeaknesses：综合能力的关键短板，一句话，不超过60字符\n");
+      prompt.append("   - industrialPosition：综合能力的行业定位，一句话，不超过60字符\n");
       prompt.append("   - benchmarkComprehensivePositioning：行业对标的定位，一句话，不超过70字符\n");
       prompt.append("   - benchmarkCompetitiveAdvantages：行业对标的优势分析，一句话，不超过70字符\n");
       prompt.append("   - benchmarkGrowthPotential：行业对标的成长空间，一句话，不超过70字符\n");
@@ -284,6 +285,9 @@ public class AiService {
       String maturityLevel = ScoreCalculator.determineMaturityLevel(comprehensiveScore);
 
       StringBuilder prompt = new StringBuilder();
+      prompt.append("**角色：**\n");
+      prompt.append("你是一个专业的敏捷行业专家，具有丰富的敏捷开发和流程改进经验。\n\n");
+
       prompt.append("**任务：**\n");
       prompt.append("根据用户的问卷答案、分数信息和相关信息，生成维度详细分析报告。\n\n");
 
@@ -304,6 +308,8 @@ public class AiService {
       prompt.append("   - detailedAnalysis：维度分析，不超过80字符\n");
       prompt.append("   - strengths：核心优势，字符串数组，2-3项，每项不超过8个字符\n");
       prompt.append("   - weaknesses：待改进项，字符串数组，2-3项，每项不超过8个字符\n");
+      prompt.append("   - industryAverage：该维度的行业平均分，根据你的行业经验给出合理分数\n");
+      prompt.append("   - industryBenchmark：该维度的行业标杆分数，根据你的行业经验给出合理分数\n");
       prompt.append("2. 输出格式为纯JSON数组，不要包含任何其他文字\n");
 
       DimensionAnalysisData[] result = chatClient.prompt()

@@ -102,9 +102,9 @@ comprehensive_data 结构 - 综合分析 + 行业对标分析
   "keyStrengths": "综合能力的核心优势，一句话，不超过60字符",
   "keyWeaknesses": "综合能力的关键短板，一句话，不超过60字符",
   "industrialPosition": "综合能力的行业定位，一句话，不超过60字符",
-  "benchmarkComprehensivePositioning": "行业对标的定位，一句话，不超过70字符",
-  "benchmarkCompetitiveAdvantages": "行业对标的优势分析，一句话，不超过70字符",
-  "benchmarkGrowthPotential": "行业对标的成长空间，一句话，不超过70字符",
+  "strategicPositioning": "战略位置评估，一句话，不超过70字符",
+  "leverageAnalysis": "杠杆效应分析，一句话，不超过70字符",
+  "roiFocus": "投资回报聚焦，一句话，不超过70字符",
   "comprehensiveScoreInfo": {
     "score": "上文中给出的综合能力分数",
     "industryAverage": "你根据自己的行业经验，给出的行业平均综合能力分数",

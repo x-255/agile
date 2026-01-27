@@ -233,9 +233,9 @@ public class AiService {
       prompt.append("   - keyStrengths：综合能力的核心优势，一句话，不超过60字符\n");
       prompt.append("   - keyWeaknesses：综合能力的关键短板，一句话，不超过60字符\n");
       prompt.append("   - industrialPosition：综合能力的行业定位，一句话，不超过60字符\n");
-      prompt.append("   - benchmarkComprehensivePositioning：行业对标的定位，一句话，不超过70字符\n");
-      prompt.append("   - benchmarkCompetitiveAdvantages：行业对标的优势分析，一句话，不超过70字符\n");
-      prompt.append("   - benchmarkGrowthPotential：行业对标的成长空间，一句话，不超过70字符\n");
+      prompt.append("   - strategicPositioning：战略位置评估，一句话，不超过70字符\n");
+      prompt.append("   - leverageAnalysis：杠杆效应分析，一句话，不超过70字符\n");
+      prompt.append("   - roiFocus：投资回报聚焦，一句话，不超过70字符\n");
       prompt.append("2. 分数信息中的平均分和标杆分请在合理范围内自动生成\n");
       prompt.append(
           "3. 所有字符串字段必须使用HTML标签，用<span style='color:#1890ff; font-weight:bold;'>高亮关键词</span>，让用户能在大段内容中第一时间提炼有用信息\n");

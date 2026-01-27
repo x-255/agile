@@ -15,9 +15,9 @@ public class ComprehensiveAnalysisData implements Serializable {
   private String keyStrengths;
   private String keyWeaknesses;
   private String industrialPosition;
-  private String benchmarkComprehensivePositioning;
-  private String benchmarkCompetitiveAdvantages;
-  private String benchmarkGrowthPotential;
+  private String strategicPositioning;
+  private String leverageAnalysis;
+  private String roiFocus;
   private ComprehensiveScoreInfo comprehensiveScoreInfo;
   
   @Data

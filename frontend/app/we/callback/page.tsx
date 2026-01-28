@@ -3,7 +3,7 @@
 import { wechatCallbackApi } from '@/app/api/wechat'
 import { useAppStore } from '@/app/store'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import useSWR from 'swr'
 
 interface UserInfo {
@@ -15,7 +15,7 @@ interface UserInfo {
   position?: string
 }
 
-export default function Page() {
+function CallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const code = searchParams.get('code')
@@ -81,5 +81,24 @@ export default function Page() {
         <p className="text-gray-600">获取用户信息成功，正在跳转...</p>
       </div>
     </div>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <h1 className="mb-4 text-2xl font-bold text-gray-900">
+              Loading...
+            </h1>
+            <p className="text-gray-600">正在处理，请稍候</p>
+          </div>
+        </div>
+      }
+    >
+      <CallbackContent />
+    </Suspense>
   )
 }

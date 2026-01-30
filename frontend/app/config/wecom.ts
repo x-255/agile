@@ -2,5 +2,5 @@
 export const WECOM_CONFIG = {
   corpId: 'wwbe02f7abf8bd67b8',
   agentId: '1000009',
-  redirectUri: 'http://wecom.perficientus.com.cn/we/callback'
+  redirectUri: `http://wecom.perficientus.com.cn${process.env.BASE_PATH ?? ''}/we/callback`,
 }
